@@ -1,20 +1,21 @@
 #include "lpc17xx_pinsel.h"
-#include "lpc17xx_gpio.h"
-#include "lpc17xx_ssp.h"
 #include "lpc17xx_i2c.h"
+#include "lpc17xx_gpio.h"
+#include "lpc17xx_spi.h"
+#include "lpc17xx_adc.h"
+#include "lpc17xx_ssp.h"
 #include "lpc17xx_timer.h"
-#include "oled.h"
 #include "light.h"
+#include "Sensor.h"
 
-
-uint32_t Light_Interrupt_Done_Flag = 0;
 static void init_i2c(void);
 static void init_ssp(void);
 
 
-typedef struct tag_sensor
-{
+typedef struct tag_sensor{
+
 	int sensor_data;
+
 }ttag_sensor;
 
 
@@ -22,21 +23,20 @@ ttag_sensor ClassHandle;
 
 
 void Sensor_new(void)
-{	init_ssp();
-	init_i2c();
+{
 
-	SysTick_Config(SystemCoreClock / 10);
-	oled_init();
-
-	light_init();
-	light_enable();
+	init_ssp();//FUNÇÃO QUE INICIA O SSP
+	init_i2c();//FUNÇÃO QUE INICIA O I2C
+	light_init();//FUNÇÃO QUE INICIA O O SENSOR DE LUZ
+	light_enable();// FUNÇÃO QUE ABILITA O SENSOR
 }
 
 int Sensor_read(void)
 {
-	Light_Interrupt_Done_Flag = 0;
+     ClassHandle.sensor_data = light_read();
 	return ClassHandle.sensor_data;
 }
+
 static void init_ssp(void)
 {
 	SSP_CFG_Type SSP_ConfigStruct;
@@ -90,12 +90,4 @@ static void init_i2c(void)
 
 	/* Enable I2C1 operation */
 	I2C_Cmd(LPC_I2C2, ENABLE);
-}
-
-void SysTick_Handler(void)
-{
-
-	ClassHandle.sensor_data =light_read();
-
-	Light_Interrupt_Done_Flag = 1;
 }
