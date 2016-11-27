@@ -27,7 +27,7 @@ void Sensor_new(void)
 
 	init_ssp();//FUNÇÃO QUE INICIA O SSP
 	init_i2c();//FUNÇÃO QUE INICIA O I2C
-	light_init();//FUNÇÃO QUE INICIA O O SENSOR DE LUZ
+	light_init();//FUNÇÃO QUE INICIA O  SENSOR DE LUZ
 	light_enable();// FUNÇÃO QUE ABILITA O SENSOR
 }
 
