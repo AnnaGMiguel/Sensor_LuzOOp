@@ -25,10 +25,10 @@ ttag_sensor ClassHandle;
 void Sensor_new(void)
 {
 
-	init_ssp();//FUNÇÃO QUE INICIA O SSP
-	init_i2c();//FUNÇÃO QUE INICIA O I2C
-	light_init();//FUNÇÃO QUE INICIA O  SENSOR DE LUZ
-	light_enable();// FUNÇÃO QUE HABILITA O SENSOR
+	init_ssp();
+	init_i2c();
+	light_init();
+	light_enable();
 }
 
 int Sensor_read(void)
@@ -73,7 +73,6 @@ static void init_ssp(void)
 	SSP_Cmd(LPC_SSP1, ENABLE);
 
 }
-
 static void init_i2c(void)
 {
 	PINSEL_CFG_Type PinCfg;
@@ -92,6 +91,3 @@ static void init_i2c(void)
 	/* Enable I2C1 operation */
 	I2C_Cmd(LPC_I2C2, ENABLE);
 }
-
-
-

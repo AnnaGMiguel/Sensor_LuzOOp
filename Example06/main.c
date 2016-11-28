@@ -11,6 +11,7 @@
 #include "lpc17xx_adc.h"
 #include "lpc17xx_timer.h"
 #include "oled.h"
+#include "oledClass.h"
 
 
 /* Demo includes. */
@@ -19,7 +20,6 @@
 /* The task functions. */
 void vLeitura( void *pvParameters );
 void vImprime( void *pvParameters );
-void oledPrint( uint8_t buf[10] );
 /*-----------------------------------------------------------*/
 /* Declare a variable of type xQueueHandle.  This is used to store the queue
 that is accessed by all two tasks. */
@@ -27,9 +27,9 @@ xQueueHandle xQueue;
 
 int main( void )
 {
-	Sensor_new();// SENSOR
-	oled_init();//TELA LCD
-	xQueue = xQueueCreate(5,sizeof(long));//FILA COM 5 POSIÇÕES TIPO LONG
+	Sensor_new();
+	oledClass();
+	xQueue = xQueueCreate(5,sizeof(long));
 
 	if(xQueue != NULL){
 		/* A função vLeitura, lê os dados do sensor e adiciona na fila com menor prioridade. */
@@ -98,15 +98,7 @@ static void intToString(int value, uint8_t* pBuf, uint32_t len, uint32_t base)
     return;
 }
 /*-----------------------------------------------------------*/
-void oledPrint( uint8_t buf[10] ){// FUNÇÃO DA LCD OLED PARA PRINT NA TELA E ATUALIZAÇÃO
 
-	oled_clearScreen(OLED_COLOR_WHITE);
-	oled_putString(1,1,  (uint8_t*)"LUM: ", OLED_COLOR_BLACK, OLED_COLOR_WHITE);
-
-	oled_fillRect((1+6*6),1, 80, 8, OLED_COLOR_WHITE);
-	oled_putString((1+6*6),1, buf, OLED_COLOR_BLACK, OLED_COLOR_WHITE);
-}
-/*-----------------------------------------------------------*/
 void vLeitura( void *pvParameters )
 {
 	char *pcTaskName;
